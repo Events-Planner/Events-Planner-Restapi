@@ -9,7 +9,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/events")
-@CrossOrigin(origins = {"http://localhost:5173", "https://sgsadanand.github.io"})
+@CrossOrigin(origins = {
+    "http://localhost:5173",
+    "https://events-planner.github.io",
+    "https://events-planner.github.io/Events-Planner-Web-UI"
+})
 public class EventController {
 
     private final EventRepository eventRepository;
