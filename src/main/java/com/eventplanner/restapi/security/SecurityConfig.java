@@ -7,6 +7,8 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
@@ -19,19 +21,21 @@ import java.util.List;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    // DEFINE THE MISSING BEAN HERE
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            // Enables CORS using the CorsConfigurationSource bean defined below
             .cors(Customizer.withDefaults())
-            .csrf(csrf -> csrf.disable()) // Required for stateless REST APIs
+            .csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                // Allow all OPTIONS preflight requests explicitly
                 .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.OPTIONS, "/**")).permitAll()
-                // Public access for authentication routes
                 .requestMatchers(AntPathRequestMatcher.antMatcher("/api/auth/**")).permitAll()
-                // Secure everything else
                 .anyRequest().authenticated()
             );
 
@@ -42,7 +46,6 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         
-        // Allowed origins (Localhost for dev + GitHub Pages for prod)
         configuration.setAllowedOriginPatterns(List.of(
             "http://localhost:*",
             "https://*.github.io"
