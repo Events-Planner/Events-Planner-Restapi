@@ -1,6 +1,6 @@
 package com.eventplanner.controller;
 
-import com.eventplanner.model.Event;
+import com.eventplanner.restapi.entity.Event;
 import com.eventplanner.repository.EventRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
