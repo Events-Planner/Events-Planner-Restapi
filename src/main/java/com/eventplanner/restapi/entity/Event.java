@@ -1,4 +1,4 @@
-package com.eventplanner.model;
+package com.eventplanner.restapi.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -23,4 +23,6 @@ public class Event {
     private String location;
 
     private String eventDate;
+    
+    private Double budget;
 }
